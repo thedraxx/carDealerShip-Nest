@@ -7,9 +7,10 @@ import {
   Patch,
   Delete,
   Body,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CarsService } from './cars.service';
+import { createCarDto } from './dto/create-car.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -21,13 +22,13 @@ export class CarsController {
   }
 
   @Get(':id')
-  getCarById(@Param('id') id: string) {
+  getCarById(@Param('id', ParseUUIDPipe) id: string) {
     return this.CarsService.findOneById(id);
   }
 
   @Post()
-  createCar(@Body() body: any) {
-    return body;
+  createCar(@Body() createCarDto: createCarDto) {
+    return createCarDto;
   }
 
   @Patch(':id')
