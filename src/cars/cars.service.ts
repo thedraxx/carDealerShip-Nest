@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { InterfaceCar } from './interface/car.interface';
-import { createCarDto,updateCardDto } from './dto/';
+import { createCarDto, updateCardDto } from './dto/';
 @Injectable()
 export class CarsService {
   private cars: InterfaceCar[] = [
@@ -23,7 +23,6 @@ export class CarsService {
     return car;
   }
 
-
   public createCarDto(createCarDto: createCarDto) {
     this.cars.push({
       id: uuidv4(),
@@ -32,19 +31,19 @@ export class CarsService {
     return {
       message: 'Car has been created successfully',
       cars: this.cars,
-    }
+    };
   }
 
   public updateCarDto(id: string, updateCarDto: updateCardDto) {
     let cardDB = this.findOneById(id);
 
-    if(updateCarDto.id && updateCarDto.id !== id) {
+    if (updateCarDto.id && updateCarDto.id !== id) {
       throw new NotFoundException(`Car with id ${id} not found!!!!`);
     }
 
     this.cars = this.cars.map((car) => {
       if (car.id === id) {
-       cardDB = {...cardDB, ...updateCarDto, id};
+        cardDB = { ...cardDB, ...updateCarDto, id };
       }
       return car;
     });
@@ -53,19 +52,26 @@ export class CarsService {
   }
 
   public removeCar(id: string) {
+    const cardDB = this.findOneById(id);
 
-    let cardDB = this.findOneById(id);
-
-    if(!cardDB) {
+    if (!cardDB) {
       throw new NotFoundException(`Car with id ${id} not found!!!!`);
     }
 
     // Remove car from array
-   this.cars = this.cars.filter((car) => car.id !== id);
+    this.cars = this.cars.filter((car) => car.id !== id);
 
     return {
       message: `Car with id ${id} has been removed`,
       cars: this.cars,
-    }
+    };
+  }
+
+  public fillCarsWithSeedData(Car: InterfaceCar[]) {
+    this.cars = Car;
+    return {
+      message: 'Cars has been filled with seed data',
+      cars: this.cars,
+    };
   }
 }

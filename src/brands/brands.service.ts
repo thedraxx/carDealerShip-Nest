@@ -6,8 +6,7 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class BrandsService {
-
-  private brands:Brand[] = [
+  private brands: Brand[] = [
     // {
     //   id: uuid(),
     //   name: 'Toyota',
@@ -16,7 +15,7 @@ export class BrandsService {
   ];
 
   create(createBrandDto: CreateBrandDto) {
-    const brand:Brand = {
+    const brand: Brand = {
       id: uuid(),
       name: createBrandDto.name,
       createdAt: Date.now(),
@@ -30,17 +29,17 @@ export class BrandsService {
   }
 
   findOne(id: string) {
-    const brand = this.brands.find(brand => brand.id === id)
+    const brand = this.brands.find((brand) => brand.id === id);
     if (!brand) throw new Error('Brand not found');
     return brand;
   }
 
   update(id: string, updateBrandDto: UpdateBrandDto) {
     let brandDB = this.findOne(id);
-    this.brands = this.brands.map(brand => {
+    this.brands = this.brands.map((brand) => {
       if (brand.id === id) {
         brandDB.updatedAt = new Date().getTime();
-        brandDB = {...brandDB, ...updateBrandDto};
+        brandDB = { ...brandDB, ...updateBrandDto };
         return brandDB;
       }
       return brand;
@@ -49,7 +48,12 @@ export class BrandsService {
   }
 
   remove(id: string) {
-    this.brands = this.brands.filter(brand => brand.id !== id);
+    this.brands = this.brands.filter((brand) => brand.id !== id);
+    return this.brands;
+  }
+
+  public fillBrandsWithSeedData(Brand: Brand[]) {
+    this.brands = Brand;
     return this.brands;
   }
 }
